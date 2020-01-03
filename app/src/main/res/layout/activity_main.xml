@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar1"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/round_draw"
+        android:elevation="6dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_menu">
+
+        <TextView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/zillaslabbold"
+            android:text="ClientApp"
+            android:textAlignment="gravity"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/tittle_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="16dp"
+        android:background="#fff"
+        android:elevation="10dp"
+        android:fontFamily="@font/patuaoneregular"
+        android:padding="10dp"
+        android:text="client"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/toolbar1"
+        app:layout_constraintEnd_toStartOf="@id/toolbar1"
+        app:layout_constraintStart_toStartOf="@+id/toolbar1"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar1" />
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:context=".MainActivity" />
+
+    <ImageView
+        android:id="@+id/gps_pinpoint"
+        android:layout_width="30dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="55dp"
+        android:layout_gravity="center"
+        android:src="@drawable/custommarker"
+        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="@+id/map"
+        app:layout_constraintStart_toStartOf="@+id/map"
+        app:layout_constraintTop_toTopOf="@+id/map" />
+
+    <RelativeLayout
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/top_round"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/map">
+
+        <HorizontalScrollView
+            android:id="@+id/scrollviewHori"
+            android:scrollbars="none"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+
+                <LinearLayout
+                    android:id="@+id/first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtfirst"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="3 min" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/firstImage"
+                        android:layout_width="30dp"
+                        android:layout_height="28dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_truck" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="Courier" />
+
+                    <TextView
+                        android:text="Rs. 120"
+                        android:background="#DBDADA"
+                        android:padding="2dp"
+                        android:fontFamily="@font/zillaslabbold"
+                        android:layout_width="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_toRightOf="@id/first"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="5 min" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="30dp"
+                        android:layout_height="28dp"
+                        android:layout_marginLeft="8dp"
+                        android:src="@drawable/ic_truck" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="Courier" />
+
+                    <TextView
+                        android:text="Rs. 190"
+                        android:background="#DBDADA"
+                        android:padding="2dp"
+                        android:fontFamily="@font/zillaslabbold"
+                        android:layout_width="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/third"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_toRightOf="@id/second"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="10 min" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="30dp"
+                        android:layout_height="28dp"
+                        android:layout_marginLeft="8dp"
+                        android:src="@drawable/ic_truck" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="Courier" />
+
+                    <TextView
+                        android:text="Rs. 160"
+                        android:background="#DBDADA"
+                        android:padding="2dp"
+                        android:fontFamily="@font/zillaslabbold"
+                        android:layout_width="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fourth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_toRightOf="@id/third"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="1 min" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="30dp"
+                        android:layout_height="28dp"
+                        android:layout_marginLeft="8dp"
+                        android:src="@drawable/ic_truck" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="Courier" />
+
+                    <TextView
+                        android:text="Rs. 130"
+                        android:background="#DBDADA"
+                        android:padding="2dp"
+                        android:fontFamily="@font/zillaslabbold"
+                        android:layout_width="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fifth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_toRightOf="@id/fourth"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="1 min" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="30dp"
+                        android:layout_height="28dp"
+                        android:layout_marginLeft="8dp"
+                        android:src="@drawable/ic_truck" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="Courier" />
+
+                    <TextView
+                        android:text="Rs. 150"
+                        android:background="#DBDADA"
+                        android:padding="2dp"
+                        android:fontFamily="@font/zillaslabbold"
+                        android:layout_width="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/sixth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_toRightOf="@id/fifth"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="1 min" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="30dp"
+                        android:layout_height="28dp"
+                        android:layout_marginLeft="8dp"
+                        android:src="@drawable/ic_truck" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="Courier" />
+
+                    <TextView
+                        android:text="Rs. 110"
+                        android:background="#DBDADA"
+                        android:padding="2dp"
+                        android:fontFamily="@font/zillaslabbold"
+                        android:layout_width="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/seven"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_toRightOf="@id/sixth"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="9 min" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="30dp"
+                        android:layout_height="28dp"
+                        android:layout_marginLeft="8dp"
+                        android:src="@drawable/ic_truck" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="Courier" />
+                </LinearLayout>
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <RelativeLayout
+            android:layout_below="@id/scrollviewHori"
+            android:layout_width="match_parent"
+            android:background="@color/dividerColor"
+            android:layout_height="0.1dp"/>
+
+        <HorizontalScrollView
+            android:layout_below="@id/scrollviewHori"
+            android:scrollbars="none"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                >
+
+                <TextView
+                    android:id="@+id/firsttxt"
+                    android:layout_marginTop="23dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/text_rounded_color"
+                    android:padding="5dp"
+                    android:text="Sharing"
+                    android:textColor="#fff" />
+
+                <TextView
+                    android:id="@+id/secondtxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/firsttxt"
+                    android:layout_marginTop="23dp"
+                    android:layout_marginEnd="30dp"
+                    android:background="@drawable/text_rounded_trasport"
+                    android:padding="5dp"
+                    android:text="Trasnport Services"
+                    android:textColor="#fff" />
+
+                <TextView
+                    android:id="@+id/thirdtxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/secondtxt"
+                    android:layout_marginTop="23dp"
+                    android:background="@drawable/text_rounded_trasport"
+                    android:padding="5dp"
+                    android:layout_marginEnd="30dp"
+                    android:text="Cabs Services"
+                    android:textColor="#fff" />
+
+
+                <TextView
+                    android:id="@+id/fourthtxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/thirdtxt"
+                    android:layout_marginTop="23dp"
+                    android:background="@drawable/text_rounded_trasport"
+                    android:padding="5dp"
+                    android:layout_marginEnd="30dp"
+                    android:text="Foods Services"
+                    android:textColor="#fff" />
+
+
+                <TextView
+                    android:id="@+id/fifthtxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/fourthtxt"
+                    android:layout_marginTop="23dp"
+                    android:background="@drawable/text_rounded_trasport"
+                    android:padding="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:text="Lady Services"
+                    android:textColor="#fff" />
+            </RelativeLayout>
+
+        </HorizontalScrollView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/profile_setting"
+        android:elevation="12dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/round_relative_profile"
+        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/toolbar1"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar1"
+        app:layout_constraintVertical_bias="1.0" >
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/dummyperson" />
+
+        <TextView
+            android:layout_marginTop="8dp"
+            android:id="@+id/textView"
+            android:fontFamily="@font/kohoregular"
+            android:textStyle="bold"
+            android:layout_toEndOf="@id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Rahul Sharma"
+            android:textColor="#fff"
+           />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:fontFamily="@font/kohoregular"
+            android:textStyle="bold"
+            android:layout_toEndOf="@id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="26 Year"
+            android:textColor="#fff"
+        />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:fontFamily="@font/kohoregular"
+            android:textStyle="bold"
+            android:layout_toEndOf="@id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView2"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="26 july 1994"
+            android:textColor="#fff"
+            />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:fontFamily="@font/kohoregular"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView3"
+            android:layout_toEndOf="@id/imageView"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Member since 2 year"
+            android:textColor="#fff"
+             />
+
+        <ScrollView
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_below="@id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/settings"
+                    android:text="Settings"
+                    android:padding="5dp"
+                    android:background="#32FFFFFF"
+                    android:fontFamily="@font/patuaoneregular"
+                    android:textSize="19sp"
+                    android:textColor="#fff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/about_us"
+                    android:layout_below="@id/settings"
+                    android:textColor="#fff"
+                    android:padding="10dp"
+                    android:textSize="17sp"
+                    android:fontFamily="@font/titiliumsemibold"
+                    android:text="About"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+                <TextView
+                    android:id="@+id/payment_support"
+                    android:layout_below="@id/about_us"
+                    android:textColor="#fff"
+                    android:padding="10dp"
+                    android:textSize="17sp"
+                    android:fontFamily="@font/titiliumsemibold"
+                    android:text="Payment Support"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/private_policy"
+                    android:layout_below="@id/payment_support"
+                    android:textColor="#fff"
+                    android:padding="10dp"
+                    android:textSize="17sp"
+                    android:fontFamily="@font/titiliumsemibold"
+                    android:text="Private Policy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/add_money"
+                    android:layout_below="@id/private_policy"
+                    android:textColor="#fff"
+                    android:padding="10dp"
+                    android:textSize="17sp"
+                    android:fontFamily="@font/titiliumsemibold"
+                    android:text="Add Money to Wallet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/support"
+                    android:layout_below="@id/add_money"
+                    android:textColor="#fff"
+                    android:padding="10dp"
+                    android:textSize="17sp"
+                    android:fontFamily="@font/titiliumsemibold"
+                    android:text="Support"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/ride_share"
+                    android:layout_below="@id/support"
+                    android:textColor="#fff"
+                    android:padding="10dp"
+                    android:textSize="17sp"
+                    android:fontFamily="@font/titiliumsemibold"
+                    android:text="Ride Share"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/licence"
+                    android:layout_below="@id/ride_share"
+                    android:textColor="#fff"
+                    android:padding="10dp"
+                    android:textSize="17sp"
+                    android:fontFamily="@font/titiliumsemibold"
+                    android:text="Licence"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_below="@id/licence"
+                    android:textColor="#fff"
+                    android:padding="10dp"
+                    android:textSize="17sp"
+                    android:fontFamily="@font/titiliumsemibold"
+                    android:text="Self Drive Booking"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+        </ScrollView>
+
+    </RelativeLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
