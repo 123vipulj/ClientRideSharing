@@ -11,47 +11,193 @@
         android:id="@+id/toolbar1"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/round_draw"
+        android:background="#fff"
         android:elevation="6dp"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_menu">
 
-        <TextView
-
+        <HorizontalScrollView
+            android:layout_below="@id/scrollviewHori"
+            android:scrollbars="none"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/zillaslabbold"
-            android:text="ClientApp"
-            android:textAlignment="gravity"
-            android:textSize="21sp"
-            android:textStyle="bold" />
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                >
+
+                <TextView
+                    android:id="@+id/firsttxt"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/text_rounded_color"
+                    android:padding="5dp"
+                    android:text="Sharing"
+                    android:textColor="#fff" />
+
+                <TextView
+                    android:id="@+id/secondtxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/firsttxt"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="30dp"
+                    android:background="@drawable/text_rounded_trasport"
+                    android:padding="5dp"
+                    android:text="Trasnport Services"
+                    android:textColor="#fff" />
+
+                <TextView
+                    android:id="@+id/thirdtxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/secondtxt"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/text_rounded_trasport"
+                    android:padding="5dp"
+                    android:layout_marginEnd="30dp"
+                    android:text="Cabs Services"
+                    android:textColor="#fff" />
+
+
+                <TextView
+                    android:id="@+id/fourthtxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/thirdtxt"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/text_rounded_trasport"
+                    android:padding="5dp"
+                    android:layout_marginEnd="30dp"
+                    android:text="Foods Services"
+                    android:textColor="#fff" />
+
+
+                <TextView
+                    android:id="@+id/fifthtxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/fourthtxt"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/text_rounded_trasport"
+                    android:padding="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:text="Lady Services"
+                    android:textColor="#fff" />
+            </RelativeLayout>
+
+        </HorizontalScrollView>
     </androidx.appcompat.widget.Toolbar>
 
-    <TextView
+    <RelativeLayout
         android:id="@+id/tittle_appbar"
+        android:elevation="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="16dp"
-        android:background="#fff"
-        android:elevation="10dp"
-        android:fontFamily="@font/patuaoneregular"
-        android:padding="10dp"
-        android:text="client"
-        android:textSize="17sp"
-        android:textStyle="bold"
+        android:background="@drawable/pickup_draw"
         app:layout_constraintEnd_toEndOf="@id/toolbar1"
         app:layout_constraintEnd_toStartOf="@id/toolbar1"
         app:layout_constraintStart_toStartOf="@+id/toolbar1"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar1" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar1">
+
+        <ImageView
+            android:id="@+id/dot"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/ic_dot"
+            android:layout_marginStart="5dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"/>
+
+        <TextView
+            android:id="@+id/title_pickup"
+            android:text="@string/pickup_location"
+            android:textStyle="bold"
+            android:layout_toEndOf="@id/dot"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:textSize="13sp"
+            android:textColor="#57413E3E"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/text_pickup"
+            android:layout_toEndOf="@id/dot"
+            android:layout_below="@id/title_pickup"
+            android:layout_marginTop="1dp"
+            android:layout_marginStart="10dp"
+            android:padding="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/patuaoneregular"
+            android:hint="@string/pick_up_location"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/tittle_droploc"
+        android:elevation="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/pickup_draw"
+        app:layout_constraintEnd_toEndOf="@id/tittle_appbar"
+        app:layout_constraintEnd_toStartOf="@id/tittle_appbar"
+        app:layout_constraintStart_toStartOf="@+id/tittle_appbar"
+        app:layout_constraintTop_toBottomOf="@+id/tittle_appbar">
+
+        <ImageView
+            android:id="@+id/dot_Red"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/ic_dot_red"
+            android:layout_marginStart="5dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"/>
+
+        <TextView
+            android:id="@+id/drop_loc_title"
+            android:layout_toEndOf="@id/dot_Red"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/pickup_draw"
+            android:hint="@string/drop_location"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_below="@id/drop_loc_title"
+            android:id="@+id/drop_loc_txt"
+            android:text="drop location"
+            android:layout_marginTop="1dp"
+            android:layout_toEndOf="@id/dot_Red"
+            android:layout_marginStart="10dp"
+            android:padding="4dp"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="#A3141313"
+            android:fontFamily="@font/patuaoneregular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
 
     <fragment
         android:id="@+id/map"
@@ -350,287 +496,39 @@
         </HorizontalScrollView>
 
         <RelativeLayout
+            android:id="@+id/divider_hori"
             android:layout_below="@id/scrollviewHori"
             android:layout_width="match_parent"
             android:background="@color/dividerColor"
             android:layout_height="0.1dp"/>
 
-        <HorizontalScrollView
-            android:layout_below="@id/scrollviewHori"
-            android:scrollbars="none"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@id/divider_hori"
+            android:layout_alignParentBottom="true"
+            android:background="#B4000000"
+            android:text="RIDE NOW"
+            android:textAlignment="center"
+            android:paddingTop="15dp"
+            android:textColor="#FFEB3B"
+            android:textSize="25sp" />
 
 
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                >
-
-                <TextView
-                    android:id="@+id/firsttxt"
-                    android:layout_marginTop="23dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:background="@drawable/text_rounded_color"
-                    android:padding="5dp"
-                    android:text="Sharing"
-                    android:textColor="#fff" />
-
-                <TextView
-                    android:id="@+id/secondtxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/firsttxt"
-                    android:layout_marginTop="23dp"
-                    android:layout_marginEnd="30dp"
-                    android:background="@drawable/text_rounded_trasport"
-                    android:padding="5dp"
-                    android:text="Trasnport Services"
-                    android:textColor="#fff" />
-
-                <TextView
-                    android:id="@+id/thirdtxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/secondtxt"
-                    android:layout_marginTop="23dp"
-                    android:background="@drawable/text_rounded_trasport"
-                    android:padding="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:text="Cabs Services"
-                    android:textColor="#fff" />
-
-
-                <TextView
-                    android:id="@+id/fourthtxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/thirdtxt"
-                    android:layout_marginTop="23dp"
-                    android:background="@drawable/text_rounded_trasport"
-                    android:padding="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:text="Foods Services"
-                    android:textColor="#fff" />
-
-
-                <TextView
-                    android:id="@+id/fifthtxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/fourthtxt"
-                    android:layout_marginTop="23dp"
-                    android:background="@drawable/text_rounded_trasport"
-                    android:padding="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:text="Lady Services"
-                    android:textColor="#fff" />
-            </RelativeLayout>
-
-        </HorizontalScrollView>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/profile_setting"
-        android:elevation="12dp"
+    <FrameLayout
+        android:id="@+id/navigation_frame"
+        android:elevation="13dp"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/round_relative_profile"
-        app:layout_constraintBottom_toBottomOf="@+id/map"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar1"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/toolbar1"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar1"
-        app:layout_constraintVertical_bias="1.0" >
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageView"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/dummyperson" />
-
-        <TextView
-            android:layout_marginTop="8dp"
-            android:id="@+id/textView"
-            android:fontFamily="@font/kohoregular"
-            android:textStyle="bold"
-            android:layout_toEndOf="@id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Rahul Sharma"
-            android:textColor="#fff"
-           />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:fontFamily="@font/kohoregular"
-            android:textStyle="bold"
-            android:layout_toEndOf="@id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textView"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="26 Year"
-            android:textColor="#fff"
-        />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:fontFamily="@font/kohoregular"
-            android:textStyle="bold"
-            android:layout_toEndOf="@id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textView2"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="26 july 1994"
-            android:textColor="#fff"
-            />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:fontFamily="@font/kohoregular"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textView3"
-            android:layout_toEndOf="@id/imageView"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="Member since 2 year"
-            android:textColor="#fff"
-             />
-
-        <ScrollView
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:layout_below="@id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <RelativeLayout
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/settings"
-                    android:text="Settings"
-                    android:padding="5dp"
-                    android:background="#32FFFFFF"
-                    android:fontFamily="@font/patuaoneregular"
-                    android:textSize="19sp"
-                    android:textColor="#fff"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:id="@+id/about_us"
-                    android:layout_below="@id/settings"
-                    android:textColor="#fff"
-                    android:padding="10dp"
-                    android:textSize="17sp"
-                    android:fontFamily="@font/titiliumsemibold"
-                    android:text="About"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-
-                <TextView
-                    android:id="@+id/payment_support"
-                    android:layout_below="@id/about_us"
-                    android:textColor="#fff"
-                    android:padding="10dp"
-                    android:textSize="17sp"
-                    android:fontFamily="@font/titiliumsemibold"
-                    android:text="Payment Support"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:id="@+id/private_policy"
-                    android:layout_below="@id/payment_support"
-                    android:textColor="#fff"
-                    android:padding="10dp"
-                    android:textSize="17sp"
-                    android:fontFamily="@font/titiliumsemibold"
-                    android:text="Private Policy"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:id="@+id/add_money"
-                    android:layout_below="@id/private_policy"
-                    android:textColor="#fff"
-                    android:padding="10dp"
-                    android:textSize="17sp"
-                    android:fontFamily="@font/titiliumsemibold"
-                    android:text="Add Money to Wallet"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:id="@+id/support"
-                    android:layout_below="@id/add_money"
-                    android:textColor="#fff"
-                    android:padding="10dp"
-                    android:textSize="17sp"
-                    android:fontFamily="@font/titiliumsemibold"
-                    android:text="Support"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:id="@+id/ride_share"
-                    android:layout_below="@id/support"
-                    android:textColor="#fff"
-                    android:padding="10dp"
-                    android:textSize="17sp"
-                    android:fontFamily="@font/titiliumsemibold"
-                    android:text="Ride Share"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:id="@+id/licence"
-                    android:layout_below="@id/ride_share"
-                    android:textColor="#fff"
-                    android:padding="10dp"
-                    android:textSize="17sp"
-                    android:fontFamily="@font/titiliumsemibold"
-                    android:text="Licence"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:layout_below="@id/licence"
-                    android:textColor="#fff"
-                    android:padding="10dp"
-                    android:textSize="17sp"
-                    android:fontFamily="@font/titiliumsemibold"
-                    android:text="Self Drive Booking"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </RelativeLayout>
-        </ScrollView>
-
-    </RelativeLayout>
-
-
-
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

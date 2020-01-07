@@ -1,20 +1,22 @@
-package com.errorguys.clientridesharing
+package com.errorguys.clientridesharing.MapsUtils
 
 import android.app.IntentService
-import android.content.Context
 import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
-import android.location.Location
-import android.opengl.GLES32
 import android.os.Bundle
 import android.os.ResultReceiver
-import android.provider.SyncStateContract
 import android.util.Log
+import android.widget.Toast
+import com.errorguys.clientridesharing.InterFaceConstant.Constant
 import com.google.android.gms.maps.model.LatLng
 import java.io.IOException
 import java.lang.IllegalArgumentException
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.util.*
+import kotlin.math.round
 
 class FetchAddressIntentService : IntentService(TAG) {
 
@@ -40,20 +42,34 @@ class FetchAddressIntentService : IntentService(TAG) {
 
         geocoder = Geocoder(this, Locale.getDefault())
 
-        val location = intent.getParcelableExtra<LatLng>(
-            Constant.LOCATION_DATA_EXTRA)
+        val location :LatLng? = intent.getParcelableExtra(
+            Constant.LOCATION_DATA_EXTRA
+        )
 
         var addresses: List<Address> = emptyList()
 
         try {
-            addresses = geocoder!!.getFromLocation(location.latitude, location.longitude, 1)
+            /*
+            *  geocoder cannot reverse process every long decimal latitude and longitude value
+            * , so better limit the decimal
+            * */
+            val latitude_dec = DecimalFormat("#.###")
+                latitude_dec.roundingMode = RoundingMode.CEILING
+
+            val longitude_dec = DecimalFormat("#.###")
+            latitude_dec.roundingMode = RoundingMode.CEILING
+
+
+            Log.e(TAG,  (latitude_dec.format(location!!.longitude)).toString() + "  " + (longitude_dec.format(location.latitude)).toString())
+            addresses = geocoder!!.getFromLocation(latitude_dec.format(location.latitude).toDouble(), latitude_dec.format(
+                location.longitude).toDouble(), 1)
         } catch (ioException: IOException) {
             Log.e(TAG, errorMessage, ioException)
         } catch (illegalArgumentException: IllegalArgumentException) {
             Log.e(TAG, "invalid lat long used")
         }
 
-        if (addresses == null || addresses.isEmpty()) {
+        if (addresses.isEmpty()) {
             if (errorMessage.isEmpty()) {
                 errorMessage = "no address found"
             }
@@ -67,15 +83,19 @@ class FetchAddressIntentService : IntentService(TAG) {
                 (0..maxAddressLineIndex).map { getAddressLine(it) }
             }
 
-            deliverResultToReceiver(Constant.SUCCESS_RESULT,
+            deliverResultToReceiver(
+                Constant.SUCCESS_RESULT,
                 addressFragment.joinToString(separator = "\n"))
 
         }
     }
 
+    // send data to MainActivity where onReceiveResult method implemented
+    // which wait for result to come
     private fun deliverResultToReceiver(resultCode: Int, message: String) {
         val bundle = Bundle().apply { putString(Constant.RESULT_DATA_KEY, message) }
         receiver?.send(resultCode, bundle)
     }
 
+    fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
 }

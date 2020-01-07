@@ -3,21 +3,21 @@ package com.errorguys.clientridesharing
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.nfc.Tag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.ResultReceiver
-import android.provider.CalendarContract
 import android.util.DisplayMetrics
-import android.view.MotionEvent
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.*
@@ -25,13 +25,30 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
+import com.errorguys.clientridesharing.Fragments.NavigationView
+import com.errorguys.clientridesharing.InterFaceConstant.Constant
+import com.errorguys.clientridesharing.InterFaceConstant.locationListener
+import com.errorguys.clientridesharing.MapsUtils.FetchAddressIntentService
+import com.errorguys.clientridesharing.MapsUtils.Location
+import com.errorguys.clientridesharing.PickUpDrop.DropActivity
+import com.errorguys.clientridesharing.PickUpDrop.PickUpActivity
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.AutocompleteActivity
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -45,7 +62,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     var marker: Marker? = null
     private var lastLocation: android.location.Location? = null
     private var mResultReceiver: AddressResultReceiver? = null
-    lateinit var text_title: TextView
+    var autoCompleteFragment : AutocompleteSupportFragment? = null
+    val TAG = "MAINLOG"
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -53,27 +71,39 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        Places.initialize(this, "AIzaSyCegfHgKwPaor1xs_4SgoQpnjAujj26CXk")
+        val placesClient: PlacesClient = Places.createClient(this)
+
+        // initialize view
         mRelativeLayout = findViewById(R.id.view)
         mToolbar = findViewById(R.id.toolbar1)
-        mFirstLinear = findViewById(R.id.firstImage)
         mRelativeLayoutPro = RelativeLayout(this)
         mResultReceiver = AddressResultReceiver(Handler())
-        text_title = findViewById(R.id.tittle_appbar)
 
+        mToolbar.title = ""
+
+        // add layout to fragment
+        supportFragmentManager.beginTransaction()
+            .add(R.id.navigation_frame, NavigationView.newInstance(), "navi")
+            .commit()
 
         // set profile invisible when first appear on screen
-        profile_setting.visibility = View.INVISIBLE
+        navigation_frame.visibility = View.INVISIBLE
 
         setSupportActionBar(mToolbar)
 
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
+        // toolbar navigation and animate
         mToolbar.setNavigationOnClickListener {
-            if (profile_setting.isVisible) {
+            if (navigation_frame.isVisible) {
                 val valueAnimator = ValueAnimator.ofFloat(1f, 0f)
                 valueAnimator.addUpdateListener {
                     val value = it.animatedValue as Float
-                    profile_setting.alpha = value
+                    navigation_frame.alpha = value
                     if (value == 0.0.toFloat()) {
-                        profile_setting.visibility = View.INVISIBLE
+                        navigation_frame.visibility = View.INVISIBLE
                     }
 
                 }
@@ -87,68 +117,83 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
                 valueAnimator.addUpdateListener {
                     val value = it.animatedValue as Float
-                    profile_setting.alpha = value
+                    navigation_frame.alpha = value
 
                 }
                 valueAnimator.interpolator = LinearInterpolator()
                 valueAnimator.duration = 400L
                 valueAnimator.start()
                 mToolbar.setNavigationIcon(R.drawable.ic_left)
-                profile_setting.visibility = View.VISIBLE
+                navigation_frame.visibility = View.VISIBLE
             }
         }
 
 
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        // location initializer,  request current location from gps
+        location = Location(
+            this,
+            object :
+                locationListener {
+                override fun locationResponse(locationResult: LocationResult) {
+                    mMap.clear()
+                    val currentLoc = LatLng(
+                        locationResult.lastLocation.latitude,
+                        locationResult.lastLocation.longitude
+                    )
 
+                    marker = mMap.addMarker(
+                        MarkerOptions().icon(
+                            BitmapDescriptorFactory.fromBitmap(bitmapScaledDescriptorFromVector())
+                        ).position(currentLoc).title("hi")
+                    )
 
-        firstImage.setOnClickListener {
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 14f))
+                    startIntentService(currentLoc)
+                    location?.stopUpdateLocation()
+                }
+            })
 
-            first.getLocationOnScreen(lastTouchDownXY)
+        //pickup search activity intent
+        tittle_appbar.setOnClickListener {
+            val fields: MutableList<Place.Field> = mutableListOf(Place.Field.LAT_LNG, Place.Field.ADDRESS)
 
-            val floatX = lastTouchDownXY[0]
-            val floatY = lastTouchDownXY[1]
+            intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).setCountry("IN").build(this)
+            startActivityForResult(intent, Constant.AUTOCOMPLETE_REQUEST_CODE_PICKUP)
 
-            val txt_price = TextView(this)
-            txt_price.width = 150
-            txt_price.maxWidth = 160
-            txt_price.textSize = 17f
-            txt_price.setPadding(10)
-            txt_price.text = "Rs. 120"
-            txt_price.setTextColor(Color.RED)
-            txt_price.background = ContextCompat.getDrawable(this, R.drawable.roundpatch)
-            txt_price.translationX = floatX.toFloat()
-            txt_price.translationY = (floatY - 200).toFloat()
-            txt_price.elevation = 8f
-            activity_root_layout.addView(txt_price)
-            Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show()
         }
 
-        location = Location(this, object : locationListner {
-            override fun locationResponse(locationResult: LocationResult) {
-                mMap.clear()
-                val currentLoc = LatLng(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude)
-                marker = mMap.addMarker(MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(bitmapScaledDescriptorFromVector())).position(currentLoc).title("hi"))
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 14f))
-                location?.stopUpdateLocation()
-            }
-        })
+        //drop search activity intent
+        tittle_droploc.setOnClickListener {
+            val fields: MutableList<Place.Field> = mutableListOf(Place.Field.LAT_LNG, Place.Field.ADDRESS)
+
+            intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).setCountry("IN").build(this)
+            startActivityForResult(intent, Constant.AUTOCOMPLETE_REQUEST_CODE_PICKUP)
+        }
+
     }
 
 
-        /*
-        animator start from where it set when you translate y to out of screen .
-        Then you need to animate from outside the screen into screen.
-        * */
-
+    /*
+    animator start from where view setted when you translate y properties
+    to out of screen .Then you need to animate view from out of screen into screen.
+    * */
     override fun onMapReady(googleMap: GoogleMap?) {
         mMap = googleMap!!
 
+        // gps point
+        mMap.isMyLocationEnabled = true
+
         // hide with toolbar and bootom navigation
         mMap.setOnCameraMoveStartedListener {
+            //clear off all properties of mMap object
             mMap.clear()
+
+
+
+            // gps_pinpoint is image view fixed on center of screen when user drag map to prefered location,
+            // map marker will gone and fake marker will display until user let out
             gps_pinpoint.visibility = View.VISIBLE
+            tittle_droploc.visibility = View.INVISIBLE
 
             val valueAnimator = ValueAnimator.ofInt(0, 600)
             valueAnimator.addUpdateListener {
@@ -162,9 +207,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             valueAnimToolbar.addUpdateListener {
                 val value = it.animatedValue as Int
                 mToolbar.translationY =  (value).toFloat()
-
             }
 
+            // animator set animate two or more view in parallel
             val mAnimatorSet = AnimatorSet()
             mAnimatorSet.duration = 600
             mAnimatorSet.interpolator = AccelerateInterpolator()
@@ -173,19 +218,24 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         }
 
-
+        // when user let out finger from map this listener will activate
         mMap.setOnCameraIdleListener {
 
-
+            // fake marker will gone and real marker put into center of map and fetch the longitude
+            // and latitude of this place
             val midLatLng : LatLng = mMap.cameraPosition.target
             if (marker != null) {
                 marker?.position = midLatLng
-                mMap.addMarker(MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(bitmapScaledDescriptorFromVector())).position(marker!!.position).title("hi"))
-                startIntentService(midLatLng)
+                mMap.addMarker(MarkerOptions().icon(BitmapDescriptorFactory
+                    .fromBitmap(bitmapScaledDescriptorFromVector()))
+                    .position(marker!!.position).title("hi"))
+                Toast.makeText(this, "" + midLatLng, Toast.LENGTH_SHORT).show()
+
+                startIntentService( midLatLng)
             }
 
             gps_pinpoint.visibility = View.INVISIBLE
-
+            tittle_droploc.visibility = View.VISIBLE
 
 
             val valueAnimator = ValueAnimator.ofInt(0, 600)
@@ -210,10 +260,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             mAnimatorSet.start()
         }
 
-
     }
 
-
+    // get the height of screen
     fun getDisplayHeight() : Int {
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
@@ -255,6 +304,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         return bitmapDraw
     }
 
+    // this method start address receiver intent, passing longitude and latitude object
     private fun startIntentService(vlatlng : LatLng) {
         val intent = Intent(this, FetchAddressIntentService::class.java).apply {
             putExtra(Constant.RECEIVER, mResultReceiver)
@@ -272,8 +322,46 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
          * Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
          */
         override fun onReceiveResult(resultCode: Int, resultData: Bundle) {
-            text_title.text = resultData.getString(Constant.RESULT_DATA_KEY)
+            text_pickup.text = resultData.getString(Constant.RESULT_DATA_KEY)
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        // pickup
+        if (requestCode == Constant.AUTOCOMPLETE_REQUEST_CODE_PICKUP) {
+            when (resultCode) {
+                RESULT_OK -> {
+                    val place: Place = Autocomplete.getPlaceFromIntent(data!!)
+                    Log.i(TAG, "Place: " + place.name + ", " + place.address)
+                }
+                AutocompleteActivity.RESULT_ERROR -> {
+                    val status: Status = Autocomplete.getStatusFromIntent(data!!)
+                    Log.i(TAG, status.statusMessage.toString())
+                }
+                Activity.RESULT_CANCELED -> {
+
+                }
+            }
+        }
+
+        // drop
+        if (requestCode == Constant.AUTOCOMPLETE_REQUEST_CODE_DROP) {
+            when (resultCode) {
+                RESULT_OK -> {
+                    val place: Place = Autocomplete.getPlaceFromIntent(data!!)
+                    Log.i(TAG, "Place: " + place.name + ", " + place.address)
+                }
+                AutocompleteActivity.RESULT_ERROR -> {
+                    val status: Status = Autocomplete.getStatusFromIntent(data!!)
+                    Log.i(TAG, status.statusMessage.toString())
+                }
+                Activity.RESULT_CANCELED -> {
+
+                }
+            }
+        }
+    }
+
 
 }

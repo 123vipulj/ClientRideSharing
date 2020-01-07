@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">ClientRideSharing</string>
+    <string name="drop_location">Drop Location</string>
+    <string name="pick_up_location">Pick Up Location</string>
+    <string name="pickup_location">Pickup Location</string>
 </resources>

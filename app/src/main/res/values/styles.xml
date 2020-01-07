@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="textViewAppearance" parent="@style/TextAppearance.AppCompat.Medium">
+        <item name="android:textSize">17sp</item>
+        <item name="android:fontFamily">@font/titiliumsemibold</item>
+        <item name="android:textColor">#D53C3939</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

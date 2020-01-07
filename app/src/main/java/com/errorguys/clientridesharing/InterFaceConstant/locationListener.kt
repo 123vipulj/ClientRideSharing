@@ -1,7 +1,7 @@
-package com.errorguys.clientridesharing
+package com.errorguys.clientridesharing.InterFaceConstant
 
 import com.google.android.gms.location.LocationResult
 
-interface locationListner {
+interface locationListener {
     fun locationResponse(locationResult: LocationResult)
 }

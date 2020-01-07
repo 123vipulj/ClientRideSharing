@@ -1,14 +1,14 @@
-package com.errorguys.clientridesharing
+package com.errorguys.clientridesharing.MapsUtils
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.errorguys.clientridesharing.InterFaceConstant.locationListener
 import com.google.android.gms.location.*
 
-open class Location (var activity: AppCompatActivity, locationListner: locationListner) {
+open class Location (var activity: AppCompatActivity, locationListner: locationListener) {
     private val permissionFineLocation = android.Manifest.permission.ACCESS_FINE_LOCATION
     private val permissionCoarseLocation = android.Manifest.permission.ACCESS_COARSE_LOCATION
 
