@@ -101,7 +101,7 @@
         android:id="@+id/tittle_appbar"
         android:elevation="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="16dp"
@@ -111,13 +111,14 @@
         app:layout_constraintStart_toStartOf="@+id/toolbar1"
         app:layout_constraintTop_toBottomOf="@+id/toolbar1">
 
-        <ImageView
+        <com.errorguys.clientridesharing.CustomView.DashLine
             android:id="@+id/dot"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/ic_dot"
+            android:layout_marginTop="0dp"
             android:layout_marginStart="5dp"
-            android:layout_width="15dp"
-            android:layout_height="15dp"/>
+            android:paddingTop="5dp"
+            app:circlePosBottom = "false"
+            android:layout_width="28dp"
+            android:layout_height="match_parent"/>
 
         <TextView
             android:id="@+id/title_pickup"
@@ -147,12 +148,11 @@
             />
     </RelativeLayout>
 
-
     <RelativeLayout
         android:id="@+id/tittle_droploc"
         android:elevation="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="16dp"
@@ -162,13 +162,13 @@
         app:layout_constraintStart_toStartOf="@+id/tittle_appbar"
         app:layout_constraintTop_toBottomOf="@+id/tittle_appbar">
 
-        <ImageView
+        <com.errorguys.clientridesharing.CustomView.DashLine
             android:id="@+id/dot_Red"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/ic_dot_red"
+            android:layout_marginTop="0dp"
+            app:circlePosBottom = "true"
             android:layout_marginStart="5dp"
-            android:layout_width="15dp"
-            android:layout_height="15dp"/>
+            android:layout_width="28dp"
+            android:layout_height="match_parent"/>
 
         <TextView
             android:id="@+id/drop_loc_title"
@@ -277,13 +277,13 @@
                         android:text="Courier" />
 
                     <TextView
-                        android:text="Rs. 120"
-                        android:background="#DBDADA"
-                        android:padding="2dp"
-                        android:fontFamily="@font/zillaslabbold"
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:layout_height="wrap_content"/>
+                        android:background="@color/textBackGround"
+                        android:fontFamily="@font/zillaslabbold"
+                        android:padding="2dp"
+                        android:text="Rs. 120" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -503,19 +503,33 @@
             android:layout_height="0.1dp"/>
 
         <TextView
+            android:id="@+id/ride_now"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/divider_hori"
             android:layout_alignParentBottom="true"
             android:background="#B4000000"
+            android:paddingTop="15dp"
             android:text="RIDE NOW"
             android:textAlignment="center"
-            android:paddingTop="15dp"
             android:textColor="#FFEB3B"
             android:textSize="25sp" />
 
 
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/gps_loc_button"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/textBackGround"
+        android:elevation="8dp"
+        android:foreground="@drawable/ic_gps"
+        android:padding="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/navigation_frame" />
 
     <FrameLayout
         android:id="@+id/navigation_frame"
@@ -529,6 +543,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar1" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar1" >
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

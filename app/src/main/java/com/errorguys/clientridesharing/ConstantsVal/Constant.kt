@@ -1,4 +1,4 @@
-package com.errorguys.clientridesharing.InterFaceConstant
+package com.errorguys.clientridesharing.ConstantsVal
 
 object Constant {
     const val SUCCESS_RESULT = 0

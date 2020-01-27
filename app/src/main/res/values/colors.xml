@@ -7,4 +7,11 @@
     <color name="dividerColor">#BDBDBD</color>
     <color name="primaryTextColor">#212121</color>
     <color name="primaryColor">#9E9E9E</color>
+    <color name="orangeBackground">#e7a160</color>
+    <color name="blueBackground">#6d56cb</color>
+    <color name="dimBlack">#101215</color>
+    <color name="fadeBlue">#60dac1</color>
+    <color name="fadeBlueSixty">#b3d8c1</color>
+    <color name="fadeBlueEighty">#6bc2b1</color>
+    <color name="textBackGround">#e6f6fe</color>
 </resources>

@@ -9,8 +9,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
-import android.graphics.Color
-import android.nfc.Tag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -18,21 +16,22 @@ import android.os.ResultReceiver
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.*
-import androidx.appcompat.widget.AppCompatImageView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.core.view.setPadding
 import com.errorguys.clientridesharing.Fragments.NavigationView
-import com.errorguys.clientridesharing.InterFaceConstant.Constant
-import com.errorguys.clientridesharing.InterFaceConstant.locationListener
+import com.errorguys.clientridesharing.ConstantsVal.Constant
+import com.errorguys.clientridesharing.ConstantsVal.locationListener
+import com.errorguys.clientridesharing.CustomView.ConnectedDot
 import com.errorguys.clientridesharing.MapsUtils.FetchAddressIntentService
 import com.errorguys.clientridesharing.MapsUtils.Location
-import com.errorguys.clientridesharing.PickUpDrop.DropActivity
-import com.errorguys.clientridesharing.PickUpDrop.PickUpActivity
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -41,46 +40,54 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    private val TAG = "MAINLOG"
     private lateinit var mMap: GoogleMap
     private lateinit var mRelativeLayout: RelativeLayout
-    private lateinit var mFirstLinear: AppCompatImageView
     private lateinit var mToolbar: androidx.appcompat.widget.Toolbar
-    private var lastTouchDownXY = IntArray(2)
     private lateinit var mRelativeLayoutPro : RelativeLayout
     var location: Location? = null
     var marker: Marker? = null
-    private var lastLocation: android.location.Location? = null
     private var mResultReceiver: AddressResultReceiver? = null
-    var autoCompleteFragment : AutocompleteSupportFragment? = null
-    val TAG = "MAINLOG"
+    val locationManager : android.location.Location? = null
+    private var connectedDot :ConnectedDot? = null
+    lateinit var constraintLayout : ConstraintLayout
 
 
+    /*
+    *  using third party library
+    *  Google Map Direction = "https://github.com/akexorcist/Android-GoogleDirectionLibrary"
+    * */
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        connectedDot = ConnectedDot(this)
+        connectedDot?.id = R.id.customViews
 
         Places.initialize(this, "AIzaSyCegfHgKwPaor1xs_4SgoQpnjAujj26CXk")
-        val placesClient: PlacesClient = Places.createClient(this)
+        val placesClient = Places.createClient(this)
+
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
         // initialize view
         mRelativeLayout = findViewById(R.id.view)
         mToolbar = findViewById(R.id.toolbar1)
         mRelativeLayoutPro = RelativeLayout(this)
         mResultReceiver = AddressResultReceiver(Handler())
+        constraintLayout = findViewById(R.id.activity_root_layout)
 
         mToolbar.title = ""
+
+        // dot marker
+        addDotToView()
 
         // add layout to fragment
         supportFragmentManager.beginTransaction()
@@ -91,9 +98,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         navigation_frame.visibility = View.INVISIBLE
 
         setSupportActionBar(mToolbar)
-
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
 
         // toolbar navigation and animate
         mToolbar.setNavigationOnClickListener {
@@ -153,6 +157,22 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             })
 
+//        GoogleDirection.withServerKey("AIzaSyCegfHgKwPaor1xs_4SgoQpnjAujj26CXk")
+//            .from(LatLng(18.521703, 73.906373))
+//            .to(LatLng(18.523168, 73.888778))
+//            .avoid(AvoidType.FERRIES)
+//            .execute(object: DirectionCallback {
+//                override fun onDirectionSuccess(direction: Direction?) {
+//
+//                }
+//
+//                override fun onDirectionFailure(t: Throwable?) {
+//
+//                }
+//
+//            })
+
+
         //pickup search activity intent
         tittle_appbar.setOnClickListener {
             val fields: MutableList<Place.Field> = mutableListOf(Place.Field.LAT_LNG, Place.Field.ADDRESS)
@@ -167,7 +187,27 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             val fields: MutableList<Place.Field> = mutableListOf(Place.Field.LAT_LNG, Place.Field.ADDRESS)
 
             intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).setCountry("IN").build(this)
-            startActivityForResult(intent, Constant.AUTOCOMPLETE_REQUEST_CODE_PICKUP)
+            startActivityForResult(intent, Constant.AUTOCOMPLETE_REQUEST_CODE_DROP)
+        }
+
+        // custom gps icons
+        gps_loc_button.setOnClickListener {
+            val client = FusedLocationProviderClient(this)
+            val mLoc = client.lastLocation
+            mLoc.addOnCompleteListener {
+                val currentPos = LatLng(it.result?.latitude!!, it.result?.longitude!!)
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPos, 14f))
+            }
+        }
+
+        //ride now button first it will check the destination set by user if not it will popup fragment to set destination address
+        ride_now.setOnClickListener {
+            if (drop_loc_txt.text == "drop location") {
+                val fields: MutableList<Place.Field> = mutableListOf(Place.Field.LAT_LNG, Place.Field.ADDRESS)
+
+                intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).setCountry("IN").build(this)
+                startActivityForResult(intent, Constant.AUTOCOMPLETE_REQUEST_CODE_DROP)
+            }
         }
 
     }
@@ -182,16 +222,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // gps point
         mMap.isMyLocationEnabled = true
+        mMap.uiSettings.isMyLocationButtonEnabled = false
 
         // hide with toolbar and bootom navigation
         mMap.setOnCameraMoveStartedListener {
             //clear off all properties of mMap object
             mMap.clear()
+            connectedDot?.visibility = View.INVISIBLE
 
 
 
             // gps_pinpoint is image view fixed on center of screen when user drag map to prefered location,
-            // map marker will gone and fake marker will display until user let out
+            // map marker will gone and fake marker will display until user let out finger from screen
             gps_pinpoint.visibility = View.VISIBLE
             tittle_droploc.visibility = View.INVISIBLE
 
@@ -220,6 +262,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // when user let out finger from map this listener will activate
         mMap.setOnCameraIdleListener {
+            connectedDot?.visibility = View.VISIBLE
+
 
             // fake marker will gone and real marker put into center of map and fetch the longitude
             // and latitude of this place
@@ -297,11 +341,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun bitmapScaledDescriptorFromVector(): Bitmap? {
-        val height: Int = 140
-        val width: Int = 80
+        val height = 140
+        val width = 80
         val imageBitmap = BitmapFactory.decodeResource(resources, resources.getIdentifier("custommarker", "drawable", packageName))
-        val bitmapDraw = Bitmap.createScaledBitmap(imageBitmap, width, height, false)
-        return bitmapDraw
+        return Bitmap.createScaledBitmap(imageBitmap, width, height, false)
     }
 
     // this method start address receiver intent, passing longitude and latitude object
@@ -326,6 +369,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /*
+    * Receiver for Address from AutoCompleteActivity
+    * */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         // pickup
@@ -333,7 +379,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             when (resultCode) {
                 RESULT_OK -> {
                     val place: Place = Autocomplete.getPlaceFromIntent(data!!)
-                    Log.i(TAG, "Place: " + place.name + ", " + place.address)
+                    Log.i(TAG, "Place: " + place.latLng + ", " + place.address)
                 }
                 AutocompleteActivity.RESULT_ERROR -> {
                     val status: Status = Autocomplete.getStatusFromIntent(data!!)
@@ -350,8 +396,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             when (resultCode) {
                 RESULT_OK -> {
                     val place: Place = Autocomplete.getPlaceFromIntent(data!!)
+                    drop_loc_txt.text = place.address
                     Log.i(TAG, "Place: " + place.name + ", " + place.address)
                 }
+
                 AutocompleteActivity.RESULT_ERROR -> {
                     val status: Status = Autocomplete.getStatusFromIntent(data!!)
                     Log.i(TAG, status.statusMessage.toString())
@@ -363,5 +411,25 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    private fun addDotToView() {
+        val set = ConstraintSet()
 
+        set.clone(constraintLayout)
+
+        val params = RelativeLayout.LayoutParams(
+            40,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+
+        connectedDot?.layoutParams = params
+
+        connectedDot?.elevation = 30f
+        constraintLayout.addView(connectedDot)
+
+        set.connect(connectedDot!!.id, ConstraintSet.START, tittle_appbar.id, ConstraintSet.START,0 )
+        set.connect(connectedDot!!.id, ConstraintSet.END, tittle_appbar.id, ConstraintSet.END,0 )
+        set.connect(connectedDot!!.id, ConstraintSet.TOP, tittle_appbar.id, ConstraintSet.BOTTOM, 0)
+        set.connect(connectedDot!!.id, ConstraintSet.BOTTOM, gps_pinpoint.id, ConstraintSet.TOP, 0)
+        set.applyTo(constraintLayout)
+    }
 }

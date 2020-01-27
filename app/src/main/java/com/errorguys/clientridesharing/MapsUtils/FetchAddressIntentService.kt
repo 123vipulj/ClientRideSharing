@@ -7,16 +7,13 @@ import android.location.Geocoder
 import android.os.Bundle
 import android.os.ResultReceiver
 import android.util.Log
-import android.widget.Toast
-import com.errorguys.clientridesharing.InterFaceConstant.Constant
+import com.errorguys.clientridesharing.ConstantsVal.Constant
 import com.google.android.gms.maps.model.LatLng
 import java.io.IOException
 import java.lang.IllegalArgumentException
-import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
-import kotlin.math.round
 
 class FetchAddressIntentService : IntentService(TAG) {
 

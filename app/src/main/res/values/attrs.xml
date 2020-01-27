@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DashedLine">
+        <attr name="minimumDashGap" format="dimension"/>
+        <attr name="dashHeight" format="dimension"/>
+        <attr name="dashLength" format="dimension"/>
+        <attr name="dashColor" format="color"/>
+        <attr name="circlePosBottom" format="boolean"/>
+    </declare-styleable>
+</resources>

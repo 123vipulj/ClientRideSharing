@@ -5,7 +5,7 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.errorguys.clientridesharing.InterFaceConstant.locationListener
+import com.errorguys.clientridesharing.ConstantsVal.locationListener
 import com.google.android.gms.location.*
 
 open class Location (var activity: AppCompatActivity, locationListner: locationListener) {

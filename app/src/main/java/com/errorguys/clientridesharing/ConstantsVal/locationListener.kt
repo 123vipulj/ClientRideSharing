@@ -1,4 +1,4 @@
-package com.errorguys.clientridesharing.InterFaceConstant
+package com.errorguys.clientridesharing.ConstantsVal
 
 import com.google.android.gms.location.LocationResult
 
